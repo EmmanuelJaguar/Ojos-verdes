@@ -36,6 +36,7 @@
             left: 0;
             display: none;
             text-align: center;
+            font-style: italic; /* Letra cursiva */
         }
 
         .page.active {
@@ -43,7 +44,7 @@
         }
 
         .arrow {
-            position: absolute;
+            position: fixed;
             top: 50%;
             transform: translateY(-50%);
             font-size: 30px;
@@ -54,6 +55,7 @@
             border-radius: 50%;
             user-select: none;
             transition: background 0.3s;
+            z-index: 100;
         }
 
         .arrow:hover {
@@ -369,30 +371,24 @@
         </div>
     </div>
 
-    <div class="arrow left" onclick="changePage(-1)">&#10094;</div>
-    <div class="arrow right" onclick="changePage(1)">&#10095;</div>
+    <!-- Flechas de navegación -->
+    <div class="arrow left" onclick="changePage('prev')">&#10094;</div>
+    <div class="arrow right" onclick="changePage('next')">&#10095;</div>
 
     <script>
-        let currentPageIndex = 0;
+        let currentPage = 0; // Página inicial
         const pages = document.querySelectorAll('.page');
-        const totalPages = pages.length;
 
         function changePage(direction) {
-            // Ocultar la página actual
-            pages[currentPageIndex].classList.remove('active');
+            pages[currentPage].classList.remove('active');
 
-            // Calcular la nueva página
-            currentPageIndex += direction;
-
-            // Asegurarse de que no se salga de los límites
-            if (currentPageIndex < 0) {
-                currentPageIndex = totalPages - 1;
-            } else if (currentPageIndex >= totalPages) {
-                currentPageIndex = 0;
+            if (direction === 'next') {
+                currentPage = (currentPage + 1) % pages.length; // Si llegamos al final, volvemos al principio
+            } else {
+                currentPage = (currentPage - 1 + pages.length) % pages.length; // Si vamos al inicio, volvemos al final
             }
 
-            // Mostrar la nueva página
-            pages[currentPageIndex].classList.add('active');
+            pages[currentPage].classList.add('active');
         }
     </script>
 
